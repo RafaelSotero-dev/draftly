@@ -7,6 +7,7 @@ import { projectRoutes } from './routes/projects.js'
 
 const PORT = parseInt(process.env['PORT'] ?? '3001', 10)
 const HOST = process.env['HOST'] ?? '0.0.0.0'
+const ORIGIN = `${process.env['origin']}` || 'http://localhost:5173'
 
 async function buildServer() {
   const fastify = Fastify({
@@ -17,7 +18,7 @@ async function buildServer() {
 
   // Register CORS — allow the Vite dev server
   await fastify.register(cors, {
-    origin: 'http://localhost:5173',
+    origin: ORIGIN,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
