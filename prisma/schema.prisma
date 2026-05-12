@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// User model - managed by Supabase Auth
+// This model is for reference and to establish relations
+// Actual user creation is handled by Supabase
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  folders  Folder[]
+  projects Project[]
+
+  @@map("users")
+}
+
+model Folder {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Hierarchy (self-referencing)
+  parentId String?
+  parent   Folder?  @relation("FolderHierarchy", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  children Folder[] @relation("FolderHierarchy")
+
+  // Relations
+  userId   String
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  projects Project[]
+
+  // Indexes
+  @@index([userId])
+  @@index([parentId])
+  @@index([userId, parentId])
+  @@map("folders")
+}
+
+model Project {
+  id         String   @id @default(uuid())
+  name       String   @db.VarChar(255)
+  canvasData Json // Excalidraw JSON format
+  thumbnail  String?  @db.Text // Base64 PNG (200x150px)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  folderId String
+  folder   Folder @relation(fields: [folderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // Indexes
+  @@index([userId])
+  @@index([folderId])
+  @@index([userId, folderId])
+  @@index([updatedAt])
+  @@map("projects")
+}
