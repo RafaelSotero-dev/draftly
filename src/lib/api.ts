@@ -1,7 +1,9 @@
 import { supabase } from './supabase'
 import { ApiError } from '../api/errors'
 
-const BASE_URL = import.meta.env['BASE_API_URL'] || 'http://localhost:3001'
+const BASE_URL = import.meta.env['VITE_BASE_API_URL'] || 'http://localhost:3001'
+
+console.log(BASE_URL)
 
 /**
  * Retrieves the current session's Bearer token from Supabase.

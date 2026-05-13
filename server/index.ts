@@ -9,6 +9,8 @@ const PORT = parseInt(process.env['PORT'] ?? '3001', 10)
 const HOST = process.env['HOST'] ?? '0.0.0.0'
 const ORIGIN = `${process.env['origin']}` || 'http://localhost:5173'
 
+console.log(ORIGIN)
+
 async function buildServer() {
   const fastify = Fastify({
     logger: {
