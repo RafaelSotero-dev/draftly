@@ -4,10 +4,13 @@ import sensible from '@fastify/sensible'
 import authPlugin from './plugins/auth.js'
 import { folderRoutes } from './routes/folders.js'
 import { projectRoutes } from './routes/projects.js'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const PORT = parseInt(process.env['PORT'] ?? '3001', 10)
 const HOST = process.env['HOST'] ?? '0.0.0.0'
-const ORIGIN = `${process.env['origin']}` || 'http://localhost:5173'
+const ORIGIN = `${process.env['ORIGIN']}` || 'http://localhost:5173'
 
 console.log(ORIGIN)
 
