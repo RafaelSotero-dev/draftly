@@ -1167,3 +1167,132 @@
   z-index: 10;
   pointer-events: none;
 }
+
+/* ── Responsive / Mobile ────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  /* Auth pages */
+  .auth-page {
+    padding: 16px;
+    justify-content: center;
+    min-height: 100svh;
+  }
+
+  .auth-form-container {
+    padding: 24px 20px;
+    border-radius: 12px;
+  }
+
+  .auth-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  /* Dashboard layout — stack sidebar below header on mobile */
+  .dashboard {
+    flex-direction: column;
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 220px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .sidebar__tree {
+    max-height: 160px;
+  }
+
+  .dashboard__main {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .dashboard__header {
+    padding: 10px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .dashboard__title {
+    font-size: 14px;
+  }
+
+  .dashboard__user-email {
+    display: none;
+  }
+
+  .dashboard__user {
+    padding-left: 8px;
+  }
+
+  .dashboard__content {
+    padding: 12px;
+  }
+
+  /* Project grid — 2 columns on mobile */
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .project-card__thumbnail {
+    height: 90px;
+  }
+
+  .project-card__thumbnail-placeholder {
+    font-size: 28px;
+  }
+
+  .project-card__info {
+    padding: 8px 10px 10px;
+  }
+
+  .project-card__name {
+    font-size: 13px;
+  }
+
+  /* Modals — full width on mobile */
+  .ui-modal {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+
+  .ui-modal__actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .ui-modal__actions .ui-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Editor header on mobile */
+  .editor-header {
+    padding: 0 10px;
+    gap: 8px;
+  }
+
+  .editor-project-name {
+    font-size: 13px;
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Single column on very small screens */
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-form-container {
+    padding: 20px 16px;
+  }
+}
