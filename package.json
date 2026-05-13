@@ -9,7 +9,7 @@
     "dev:all": "concurrently --names \"frontend,backend\" --prefix-colors \"cyan,yellow\" \"npm run dev\" \"npm run dev:server\"",
     "build": "vite build",
     "build:server": "tsc -p tsconfig.server.json",
-    "server": "node --experimental-vm-modules dist/server/server/index.js",
+    "server": "node --experimental-vm-modules dist/backend/server/index.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
