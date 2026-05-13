@@ -19,6 +19,8 @@ async function buildServer() {
     logger: {
       level: process.env['NODE_ENV'] === 'production' ? 'warn' : 'info',
     },
+    // Increase body size limit to handle canvas data with embedded images (Base64)
+    bodyLimit: 50 * 1024 * 1024, // 50 MB
   })
 
   // Register CORS — allow the Vite dev server
@@ -26,6 +28,17 @@ async function buildServer() {
     origin: ORIGIN,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+
+  // Cross-Origin Isolation headers — required for Excalidraw image insertion
+  // (pica library needs getImageData on canvas, which requires these headers)
+  // cross-origin-resource-policy: cross-origin allows the frontend to load
+  // resources from this API without being blocked by COEP
+  fastify.addHook('onSend', (_request, reply, _payload, done) => {
+    void reply.header('Cross-Origin-Opener-Policy', 'same-origin')
+    void reply.header('Cross-Origin-Embedder-Policy', 'credentialless')
+    void reply.header('Cross-Origin-Resource-Policy', 'cross-origin')
+    done()
   })
 
   // Register sensible (adds reply helpers like .notFound(), .badRequest(), etc.)

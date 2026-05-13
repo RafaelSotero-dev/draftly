@@ -292,7 +292,7 @@ export function Dashboard() {
       <div className="dashboard__main">
         {/* Header */}
         <header className="dashboard__header">
-          <span className="dashboard__title">Excalidraw Clone</span>
+          <span className="dashboard__title">Draftly</span>
 
           <div className="dashboard__header-actions">
             <Button

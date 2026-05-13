@@ -5,6 +5,16 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+
+  server: {
+    // Required for Excalidraw image insertion (pica uses getImageData on canvas)
+    // credentialless is less restrictive than require-corp but still enables
+    // cross-origin isolation without blocking cross-origin API requests
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'credentialless',
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
