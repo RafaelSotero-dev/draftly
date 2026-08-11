@@ -4,6 +4,9 @@ import { PublicRoute } from './components/auth/PublicRoute'
 import { Dashboard } from '@components/dashboard/Dashboard'
 import LoginPage from './pages/auth/login'
 import RegisterPage from './pages/auth/register'
+import AuthCallbackPage from './pages/auth/callback'
+import ForgotPasswordPage from './pages/auth/forgot-password'
+import ResetPasswordPage from './pages/auth/reset-password'
 import EditorPage from './pages/project/editor'
 import './App.css'
 
@@ -27,6 +30,19 @@ function App() {
               <RegisterPage />
             </PublicRoute>
           }
+        />
+        <Route path="/auth/callback" element={<AuthCallbackPage />} />
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoute>
+              <ForgotPasswordPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={<ResetPasswordPage />}
         />
 
         {/* Protected routes — redirect to /login if unauthenticated */}

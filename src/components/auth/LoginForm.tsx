@@ -110,6 +110,12 @@ export function LoginForm() {
           />
         </div>
 
+        <p className="auth-switch auth-switch--compact">
+          <Link to="/forgot-password" className="auth-link">
+            Esqueceu sua senha?
+          </Link>
+        </p>
+
         <button
           type="submit"
           className="auth-submit"
