@@ -1,73 +1,111 @@
-# React + TypeScript + Vite
+# Draftly
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Draftly logo](./public/favicon.svg)
 
-Currently, two official plugins are available:
+Editor de quadros brancos inspirado no Excalidraw, com organização em pastas, dashboard em nuvem, autenticação via Supabase e persistência no PostgreSQL do próprio projeto Supabase, acessado via Prisma.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Visão geral
 
-## React Compiler
+O Draftly foi criado para ir além do uso básico do Excalidraw OSS: ele adiciona gerenciamento de projetos, hierarquia de pastas, salvamento automático e thumbnails para cada projeto. O Supabase é usado para autenticação; os dados de pastas e projetos ficam no PostgreSQL do Supabase via Prisma.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## O que ele faz
 
-## Expanding the ESLint configuration
+- Editor visual com base no `@excalidraw/excalidraw`
+- Dashboard com lista de projetos por pasta
+- CRUD de pastas e projetos
+- Duplicação, movimentação, renomeação e exclusão
+- Auto-save do canvas com debounce de 2 segundos
+- Exportação do projeto como arquivo `.excalidraw`
+- Login, cadastro, recuperação e redefinição de senha via Supabase Auth
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+> [!NOTE]
+> Cada usuário vê apenas seus próprios projetos e pastas.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- React 19 + TypeScript
+- Vite
+- Fastify
+- Prisma + PostgreSQL (banco hospedado no Supabase)
+- Supabase Auth
+- Excalidraw OSS
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Estrutura
+
+- `/src` - aplicação frontend
+- `/server` - API Fastify
+- `/prisma` - schema e migrations
+- `/public` - assets estáticos
+- `/docs` - especificações e decisões do projeto
+
+## Requisitos
+
+- Node.js recente compatível com Vite/Fastify
+- PostgreSQL acessível via Supabase
+- Projeto Supabase com Auth habilitado
+
+## Configuração
+
+1. Copie o arquivo de exemplo:
+
+```bash
+cp .env.example .env
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Preencha as variáveis:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `DATABASE_URL` - conexão com o PostgreSQL do Supabase usada pelo Prisma em runtime
+- `DIRECT_URL` - conexão direta usada pelo Prisma em migrations
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+- `PORT` e `HOST` se necessário
+- `VITE_BASE_API_URL` é opcional e só é usado se a API não estiver em `http://localhost:3001`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Executar localmente
+
+```bash
+npm install
+npm run dev:all
 ```
+
+Isso inicia:
+
+- frontend em `http://localhost:5173`
+- backend em `http://localhost:3001`
+
+### Scripts úteis
+
+- `npm run dev` - frontend apenas
+- `npm run dev:server` - API apenas
+- `npm run build` - build do frontend
+- `npm run build:server` - build da API
+- `npm run server` - executa a API compilada em `dist/backend/server/index.js`
+- `npm run lint` - análise estática
+- `npm run preview` - pré-visualização do build frontend
+
+## Fluxo de uso
+
+1. Crie uma conta ou faça login.
+2. Crie pastas para organizar seus projetos.
+3. Crie um projeto dentro de uma pasta.
+4. Abra o projeto para editar o canvas.
+5. O Draftly salva automaticamente as alterações e gera thumbnail em segundo plano.
+6. Exporte o arquivo `.excalidraw` quando precisar levar o desenho para outro lugar.
+
+## API
+
+O backend expõe rotas autenticadas para:
+
+- `GET /api/folders`, `POST /api/folders`, `PATCH /api/folders/:id`, `DELETE /api/folders/:id`
+- `GET /api/projects`, `POST /api/projects`, `PATCH /api/projects/:id`, `DELETE /api/projects/:id`
+- `POST /api/projects/:id/duplicate`
+- `POST /api/projects/:id/save`
+- `POST /api/projects/:id/thumbnail`
+
+## Observações
+
+> [!IMPORTANT]
+> O app depende de variáveis de ambiente válidas para iniciar. Sem `DATABASE_URL` e as credenciais do Supabase, o frontend e o backend falham ao subir.
+
+> [!TIP]
+> A hierarquia de pastas é limitada a 5 níveis e a exclusão usa cascade no banco.
