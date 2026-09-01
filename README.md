@@ -1,7 +1,5 @@
 # Draftly
 
-![Draftly logo](./public/favicon.svg)
-
 Editor de quadros brancos inspirado no Excalidraw, com organização em pastas, dashboard em nuvem, autenticação via Supabase e persistência no PostgreSQL do próprio projeto Supabase, acessado via Prisma.
 
 ## Visão geral
